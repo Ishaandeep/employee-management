@@ -1,0 +1,222 @@
+[
+  {
+    "uniqueid": "1",
+    "image": null,
+    "name": "Hukum Chand Gupta",
+    "email": "hcgupta@cstech.in",
+    "mobile": 954010044,
+    "designation": "HR",
+    "gender": "male",
+    "course": "MCA",
+    "create-date": "2021-02-13"
+  },
+  {
+    "uniqueid": "2",
+    "image": null,
+    "name": "Priya Sharma",
+    "email": "priya@example.com",
+    "mobile": 9876543210,
+    "designation": "Developer",
+    "gender": "female",
+    "course": "B.Tech",
+    "create-date": "2022-05-28"
+  },
+  {
+    "uniqueid": "3",
+    "image": null,
+    "name": "Rahul Verma",
+    "email": "rahulv@testmail.net",
+    "mobile": 8765432109,
+    "designation": "Designer",
+    "gender": "male",
+    "course": "B.Des",
+    "create-date": "2023-01-15"
+  },
+  {
+    "uniqueid": "4",
+    "image": null,
+    "name": "Anika Singh",
+    "email": "asingh123@domain.org",
+    "mobile": 7654321098,
+    "designation": "Project Manager",
+    "gender": "female",
+    "course": "MBA",
+    "create-date": "2020-11-08"
+  },
+  {
+    "uniqueid": "5",
+    "image": null,
+    "name": "David Johnson",
+    "email": "david.j@email.co",
+    "mobile": 6543210987,
+    "designation": "Data Analyst",
+    "gender": "male",
+    "course": "M.Sc.",
+    "create-date": "2021-09-22"
+  },
+  {
+    "uniqueid": "6",
+    "image": null,
+    "name": "Emily Davis",
+    "email": "emilyd@mymail.com",
+    "mobile": 5432109876,
+    "designation": "Marketing",
+    "gender": "female",
+    "course": "BBA",
+    "create-date": "2023-03-12"
+  },
+  {
+    "uniqueid": "7",
+    "image": null,
+    "name": "Michael Brown",
+    "email": "mbrown@companymail.net",
+    "mobile": 4321098765,
+    "designation": "Sales",
+    "gender": "male",
+    "course": "B.Com",
+    "create-date": "2022-08-01"
+  },
+  {
+    "uniqueid": "8",
+    "image": null,
+    "name": "Sophia Wilson",
+    "email": "sophiaw@personalmail.co",
+    "mobile": 3210987654,
+    "designation": "Content Writer",
+    "gender": "female",
+    "course": "B.A.",
+    "create-date": "2020-06-30"
+  },
+  {
+    "uniqueid": "9",
+    "image": null,
+    "name": "Daniel Lee",
+    "email": "daniel.lee@workmail.org",
+    "mobile": 2109876543,
+    "designation": "Engineer",
+    "gender": "male",
+    "course": "B.E.",
+    "create-date": "2021-12-25"
+  },
+  {
+    "uniqueid": "10",
+    "image": null,
+    "name": "Olivia Martinez",
+    "email": "olivia.m@hotmail.com",
+    "mobile": 1098765432,
+    "designation": "Accountant",
+    "gender": "female",
+    "course": "CA",
+    "create-date": "2022-04-18"
+  },
+  {
+    "uniqueid": "11",
+    "image": null,
+    "name": "William Anderson",
+    "email": "wanderson@businessmail.net",
+    "mobile": 1234567890,
+    "designation": "Consultant",
+    "gender": "male",
+    "course": "Ph.D.",
+    "create-date": "2023-07-04"
+  },
+  {
+    "uniqueid": "12",
+    "image": null,
+    "name": "Ava Taylor",
+    "email": "avataylor@yahoo.com",
+    "mobile": 9012345678,
+    "designation": "Intern",
+    "gender": "female",
+    "course": "-",
+    "create-date": "2021-03-05"
+  },
+  {
+    "uniqueid": "13",
+    "image": null,
+    "name": "Ethan Harris",
+    "email": "eharris@gmail.com",
+    "mobile": 8901234567,
+    "designation": "Support",
+    "gender": "male",
+    "course": "Diploma",
+    "create-date": "2020-09-11"
+  },
+  {
+    "uniqueid": "14",
+    "image": null,
+    "name": "Isabella Thomas",
+    "email": "isabella.t@outlook.com",
+    "mobile": 7890123456,
+    "designation": "Recruiter",
+    "gender": "female",
+    "course": "MBA",
+    "create-date": "2023-02-20"
+  },
+  {
+    "uniqueid": "15",
+    "image": null,
+    "name": "James Rodriguez",
+    "email": "james.r@live.com",
+    "mobile": 6789012345,
+    "designation": "Trainer",
+    "gender": "male",
+    "course": "M.Tech",
+    "create-date": "2022-10-17"
+  },
+  {
+    "uniqueid": "16",
+    "image": null,
+    "name": "Mia Miller",
+    "email": "miamiller@aol.com",
+    "mobile": 5678901234,
+    "designation": "Receptionist",
+    "gender": "female",
+    "course": "-",
+    "create-date": "2021-07-28"
+  },
+  {
+    "uniqueid": "17",
+    "image": null,
+    "name": "Benjamin Moore",
+    "email": "bmoore@me.com",
+    "mobile": 4567890123,
+    "designation": "Administrator",
+    "gender": "male",
+    "course": "-",
+    "create-date": "2020-04-03"
+  },
+  {
+    "uniqueid": "18",
+    "image": null,
+    "name": "Charlotte Clark",
+    "email": "cclark@icloud.com",
+    "mobile": 3456789012,
+    "designation": "Executive",
+    "gender": "female",
+    "course": "EMBA",
+    "create-date": "2023-06-19"
+  },
+  {
+    "uniqueid": "19",
+    "image": null,
+    "name": "Alexander White",
+    "email": "awhite@mail.com",
+    "mobile": 2345678901,
+    "designation": "Team Lead",
+    "gender": "male",
+    "course": "M.Sc.",
+    "create-date": "2022-01-02"
+  },
+  {
+    "uniqueid": "20",
+    "image": null,
+    "name": "Harper Young",
+    "email": "harperyoung@protonmail.com",
+    "mobile": 1234567891,
+    "designation": "Researcher",
+    "gender": "female",
+    "course": "Ph.D.",
+    "create-date": "2021-05-14"
+  }
+]
