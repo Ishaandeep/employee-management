@@ -1,8 +1,6 @@
 const jwt = require("jsonwebtoken");
 const zod = require("zod");
 const bcrypt = require("bcrypt");
-// const { JWT_SECRET } = require("../config");
-require("dotenv").config();
 
 const { Admin } = require("../db");
 

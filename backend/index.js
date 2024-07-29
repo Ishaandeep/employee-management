@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
+require("dotenv").config();
+
 const cors = require("cors");
 const mainRouter = require("./routes");
-require("dotenv").config();
 const connectionString = process.env.MONGO_URI;
 const port = process.env.PORT || 3000;
 const connectDb = async () => {

@@ -2,8 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Admin, Employee } = require("../db");
-// const { JWT_SECRET } = require("../config");
-require("dotenv").config();
+
 const {
   loginInputValidate,
   createEmployeeValidate,
