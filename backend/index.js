@@ -2,12 +2,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const mainRouter = require("./routes");
-
+require("dotenv").config();
+const connectionString = process.env.MONGO_URI;
 const port = process.env.PORT || 3000;
 const connectDb = async () => {
-  const response = await mongoose.connect(
-    "mongodb+srv://ishaan:RporavOgFURdi5my@clusteremployee.laa7ecx.mongodb.net/"
-  );
+  const response = await mongoose.connect(connectionString);
   if (response) {
     console.log("db is now connected");
   }
