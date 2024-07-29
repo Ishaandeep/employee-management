@@ -5,12 +5,14 @@ import { authState } from "../store/authState";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { url } from "../store/Store";
+import { Loader } from "./Loader";
 
 export function EmployeeList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [employees, setEmployees] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
+  const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
   const user = useRecoilValue(authState);
@@ -19,6 +21,7 @@ export function EmployeeList() {
   const sortableHeaders = ["unique id", "name", "email", "create date"];
 
   useEffect(() => {
+    setLoading(true);
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(`${url}/api/v1/admin/bulk`, {
@@ -26,16 +29,20 @@ export function EmployeeList() {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+        // console.log(response.data.employees);
         const processedEmployees = response.data.employees.map((employee) => ({
           ...employee,
           createDate: new Date(employee["createDate"])
             .toISOString()
             .split("T")[0],
         }));
-
+        console.log(processedEmployees);
         setEmployees(processedEmployees);
       } catch (err) {
         console.error("Error Fetching Employees:", err);
+      } finally {
+        setLoading(false);
+        // disabled = { loading };
       }
     };
     fetchEmployee();
@@ -56,26 +63,17 @@ export function EmployeeList() {
     });
 
     if (sortBy) {
-      const sortHeader = sortBy.toLowerCase();
-
+      const sortByLower = sortBy.toLowerCase();
       filtered.sort((a, b) => {
-        if (sortHeader === "create-date") {
+        if (sortByLower === "unique id" || sortByLower === "_id") {
+          return sortOrder === "asc" ? a._id - b._id : b._id - a._id;
+        } else if (sortByLower === "create date") {
           return sortOrder === "asc"
-            ? a[sortHeader].localeCompare(b[sortHeader])
-            : b[sortHeader].localeCompare(a[sortHeader]);
-        } else if (sortHeader === "uniqueid") {
-          return sortOrder === "asc"
-            ? a[sortHeader].localeCompare(b[sortHeader], undefined, {
-                numeric: true,
-              })
-            : b[sortHeader].localeCompare(a[sortHeader], undefined, {
-                numeric: true,
-              });
+            ? new Date(a.createDate) - new Date(b.createDate)
+            : new Date(b.createDate) - new Date(a.createDate);
         } else {
-          let aValue = a[sortHeader];
-          let bValue = b[sortHeader];
-          aValue = aValue !== undefined ? aValue.toString().toLowerCase() : "";
-          bValue = bValue !== undefined ? bValue.toString().toLowerCase() : "";
+          let aValue = a[sortByLower] || "";
+          let bValue = b[sortByLower] || "";
           return sortOrder === "asc"
             ? aValue.localeCompare(bValue)
             : bValue.localeCompare(aValue);
@@ -121,6 +119,7 @@ export function EmployeeList() {
   };
 
   const handleDelete = async (id) => {
+    setLoading(true);
     try {
       await axios.delete(`${url}/api/v1/admin/delete/${id}`, {
         headers: {
@@ -133,127 +132,132 @@ export function EmployeeList() {
       setEmployees(response.data.employees);
     } catch (err) {
       console.error("Error deleting employee: ", err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="mt-8 p-4">
-      <h2 className="text-xl font-semibold mb-4">Employee List</h2>
+    <>
+      {loading && <Loader />}
+      <div className="mt-8 p-4">
+        <h2 className="text-xl font-semibold mb-4">Employee List</h2>
 
-      {/* Search and Filter */}
-      <div className="mb-4 flex space-x-4">
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        />
-        <select
-          value={activeFilter}
-          onChange={(e) => setActiveFilter(e.target.value)}
-          className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        >
-          <option value="all">All</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
-        <button
-          onClick={handleAddEmployeeClick}
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-        >
-          Add Employee
-        </button>
-      </div>
+        {/* Search and Filter */}
+        <div className="mb-4 flex space-x-4">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+          {/* <select
+            value={activeFilter}
+            onChange={(e) => setActiveFilter(e.target.value)}
+            className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          >
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select> */}
+          <button
+            onClick={handleAddEmployeeClick}
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Add Employee
+          </button>
+        </div>
 
-      {/* Table */}
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            {headers.map((header) => (
-              <th
-                key={header}
-                scope="col"
-                className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
-                  sortableHeaders.includes(header.toLowerCase())
-                    ? "cursor-pointer"
-                    : ""
-                }`} // Conditionally add cursor-pointer
-                onClick={() =>
-                  sortableHeaders.includes(header.toLowerCase())
-                    ? handleHeaderClick(header)
-                    : null
-                } // Only handle clicks for sortable headers
-              >
-                {header}{" "}
-                {sortBy === header && (
-                  <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
-                )}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {currentItems.map((employee) => (
-            <tr key={employee._id}>
-              {Object.keys(employee).map((key) => (
-                <td
-                  key={key}
-                  className="px-6 py-4 whitespace-nowrap text-sm font-medium"
+        {/* Table */}
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              {headers.map((header) => (
+                <th
+                  key={header}
+                  scope="col"
+                  className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
+                    sortableHeaders.includes(header.toLowerCase())
+                      ? "cursor-pointer"
+                      : ""
+                  }`} // Conditionally add cursor-pointer
+                  onClick={() =>
+                    sortableHeaders.includes(header.toLowerCase())
+                      ? handleHeaderClick(header)
+                      : null
+                  } // Only handle clicks for sortable headers
                 >
-                  {key === "image" ? (
-                    <img
-                      src={employee[key]}
-                      alt="Employee"
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  ) : (
-                    employee[key]
+                  {header}{" "}
+                  {sortBy === header && (
+                    <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
                   )}
-                </td>
+                </th>
               ))}
-
-              {/* Action Column */}
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <Link
-                  to={`/editEmployee/${employee._id}`}
-                  className="text-blue-600 hover:text-blue-900"
-                >
-                  Edit
-                </Link>
-                {" | "}
-                <button
-                  className="text-red-600 hover:text-red-900"
-                  onClick={() => handleDelete(employee._id)}
-                >
-                  Delete
-                </button>
-              </td>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {currentItems.map((employee) => (
+              <tr key={employee._id}>
+                {Object.keys(employee).map((key) => (
+                  <td
+                    key={key}
+                    className="px-6 py-4 whitespace-nowrap text-sm font-medium"
+                  >
+                    {key === "image" ? (
+                      <img
+                        src={employee[key]}
+                        alt="Employee"
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                    ) : (
+                      employee[key]
+                    )}
+                  </td>
+                ))}
 
-      {/* Pagination */}
-      <div className="mt-4 flex justify-center">
-        <button
-          onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-4 py-2 mx-1 bg-gray-200 hover:bg-gray-300 rounded"
-        >
-          Previous
-        </button>
-        <span className="px-4 py-2">
-          {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => setCurrentPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 mx-1 bg-gray-200 hover:bg-gray-300 rounded"
-        >
-          Next
-        </button>
+                {/* Action Column */}
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                  <Link
+                    to={`/editEmployee/${employee._id}`}
+                    className="text-blue-600 hover:text-blue-900"
+                  >
+                    Edit
+                  </Link>
+                  {" | "}
+                  <button
+                    className="text-red-600 hover:text-red-900"
+                    onClick={() => handleDelete(employee._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Pagination */}
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 mx-1 bg-gray-200 hover:bg-gray-300 rounded"
+          >
+            Previous
+          </button>
+          <span className="px-4 py-2">
+            {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 mx-1 bg-gray-200 hover:bg-gray-300 rounded"
+          >
+            Next
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

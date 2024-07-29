@@ -8,36 +8,47 @@ import axios from "axios";
 import { useRecoilState } from "recoil";
 import { authState } from "../store/authState";
 import { url } from "../store/Store";
+import { Loader } from "../components/Loader";
+import { pwdVisibilityState } from "../store/pwdVisibilityState";
 
 export function Login() {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useRecoilState(authState);
+  const [isRevealedPwd, setIsRevealedPwd] = useRecoilState(pwdVisibilityState);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   return (
     <>
+      {loading && <Loader />}
       <Logo />
       <Header label="Login" />
       <div className="bg-slate-200 h-screen flex justify-center">
         <div className="flex flex-col justify-center">
           <div className="rounded-lg bg-white w-80 text-center p-2 h-max px-4">
-            <InputBox
-              onChange={(e) => {
-                setUserName(e.target.value);
-              }}
-              placeholder="xyz@gmail.com"
-              label={"UserName "}
-            />
-            <InputBox
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              placeholder="password"
-              label={"Password "}
-            />
+            <div>
+              <InputBox
+                onChange={(e) => {
+                  setUserName(e.target.value);
+                }}
+                placeholder="username"
+                label={"UserName "}
+              />
+              <InputBox
+                placeholder="password"
+                label={"Password "}
+                type={isRevealedPwd ? "text" : "password"}
+                value={password}
+                img={true}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+            </div>
             <div className="pt-4">
               <Button
                 onClick={async () => {
+                  setLoading(true);
                   console.log({ username, password });
                   try {
                     const response = await axios.post(
@@ -59,10 +70,13 @@ export function Login() {
                     navigate("/dashboard");
                   } catch (err) {
                     alert(err.response.data.msg);
+                  } finally {
+                    setLoading(false);
                   }
                   // console.log(response);
                 }}
                 label={"Login"}
+                disabled={loading}
               />
             </div>
           </div>
