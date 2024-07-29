@@ -19,6 +19,10 @@ function getjwt(id) {
   const token = jwt.sign({ userId: id }, process.env.JWT_SECRET);
   return token;
 }
+function getUserAfterVerify(token) {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  return decoded.userId;
+}
 adminRouter.post("/signup", loginInputValidate, (req, res) => {
   // console.log(req.body);
   const username = req.body.username;
@@ -185,7 +189,7 @@ adminRouter.get("/employee/:id", authMiddleware, async (req, res) => {
       employee,
     });
   } else {
-    res.status(400).json({ msg: "employee not found" });
+    res.status(400).json({ msg: `Employee id: ${uniqueId} do not exists` });
   }
 });
 
@@ -238,6 +242,18 @@ adminRouter.delete("/delete/:id", authMiddleware, async (req, res) => {
       msg: "Internal Server Error",
       error: err.message,
     });
+  }
+});
+adminRouter.get("/verify", authMiddleware, async (req, res) => {
+  try {
+    console.log("1");
+    const authHeader = req.headers.authorization;
+    console.log(authHeader);
+    const token = authHeader.split(" ")[1];
+    const username = getUserAfterVerify(token);
+    res.status(200).json({ msg: "Admin is verified", username: username });
+  } catch (err) {
+    res.status(403).json({ msg: "User Is not authorized, Re Login" });
   }
 });
 
